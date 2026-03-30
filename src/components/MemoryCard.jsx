@@ -7,11 +7,14 @@ export default function MemoryCard({ handleClick, emojiData, selectedCards, matc
     const cardEl = emojiData.map((emoji, index) => {
         const selectedCardEntry = selectedCards.find(emoji => emoji.index === index)
         const matchedCardEntry = matchedCards.find(emoji => emoji.index === index)
+        const cardStyle = 
+        matchedCardEntry ? "card-item--matched" : 
+        selectedCardEntry ? "card-item--selected" :
+        ""
         return (
-            <li key={index} className='card-item'>
+            <li key={index} className={`card-item ${cardStyle}`}>
                 <EmojiButton
                     content={decodeEntity(emoji.htmlCode[0])}
-                    style="btn btn--emoji"
                     handleclick={() => handleClick({
                          index, name: emoji.name
                     })} 
@@ -20,6 +23,7 @@ export default function MemoryCard({ handleClick, emojiData, selectedCards, matc
             </li>
         )
     })
+
 
     return (
         <ul className='card-container'>
