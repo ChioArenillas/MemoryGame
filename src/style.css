@@ -114,6 +114,7 @@ form {
     display: flex;
     flex-direction: column;
     gap: .5em;
+    margin-bottom: .5em;
 }
 
 select {

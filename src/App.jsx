@@ -4,13 +4,19 @@ import Form from './components/Form'
 import Confetti from "react-confetti"
 import AssistiveTechInfo from './components/AssistiveTechInfo'
 import GameOver from './components/GameOver'
+import ErrorCard from './components/ErrorCard'
 
 export default function App() {
+  const initialFormData = { category: "animals-and-nature", number: 10 }
+
+  const [isFirstRender, setIsFirstRender] = useState(true)
+  const [formData, setFormData] = useState(initialFormData)
   const [isGameOn, setIsGameOn] = useState(false)
   const [emojiData, setEmojiData] = useState([])
   const [selectedCards, setSelectedCards] = useState([])
   const [matchedCards, setMatchedCards] = useState([])
   const [areAllCardsMatched, setAreAllCardsMatched] = useState(false)
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     if (selectedCards.length === 2 && selectedCards[0].name === selectedCards[1].name) {
@@ -27,9 +33,9 @@ export default function App() {
   async function startGame(e) {
     e.preventDefault()
     try {
-      const response = await fetch('https://emojihub.yurace.pro/api/all/category/animals-and-nature')
+      const response = await fetch(`https://emojihub.yurace.pro/api/all/category/${formData.category}`)
       if (!response.ok) {
-        throw error("there was an error")
+        throw new Error("Could not fetch data from API")
       }
       const data = await response.json()
       const dataSlice = await getDataSlice(data)
@@ -37,7 +43,10 @@ export default function App() {
       setEmojiData(emojisArray)
       setIsGameOn(true)
     } catch (err) {
+      setIsError(true)
       console.error(err)
+    } finally {
+      setIsFirstRender(false)
     }
   }
   async function getDataSlice(data) {
@@ -51,7 +60,7 @@ export default function App() {
 
   function getRandomIndices(data) {
     const randomIndicesArray = []
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < formData.number / 2; i++) {
       const randomNum = Math.floor(Math.random() * data.length)
       if (!randomIndicesArray.includes(randomNum)) {
         randomIndicesArray.push(randomNum)
@@ -80,30 +89,45 @@ export default function App() {
       setSelectedCards([{ name, index }])
     }
   }
-  function resetGame(){
+  function resetGame() {
     setIsGameOn(false)
     setSelectedCards([])
     setMatchedCards([])
     setAreAllCardsMatched(false)
   }
 
+  function resetError() {
+    setIsError(false)
+  }
+
+  function handleFormChange(e) {
+    e.target.name
+    e.target.value
+    setFormData(prevData => ({ ...prevData, [e.target.name]: e.target.value }))
+  }
   return (
     <main>
       <h1>Memory Game</h1>
-      {!isGameOn && <Form handleSubmit={startGame} />}
-      {isGameOn && !areAllCardsMatched && 
-      <AssistiveTechInfo 
-        emojisData={emojiData}
-        matchedCards={matchedCards}
-      />}
-      {areAllCardsMatched && <GameOver handleClick={resetGame}/>}
+      {!isGameOn && !isError &&
+        <Form
+          handleSubmit={startGame}
+          handleChange={handleFormChange}
+          firstRender={isFirstRender}
+        />}
+      {isGameOn && !areAllCardsMatched &&
+        <AssistiveTechInfo
+          emojisData={emojiData}
+          matchedCards={matchedCards}
+        />}
+      {areAllCardsMatched && <GameOver handleClick={resetGame} />}
       {isGameOn &&
         <MemoryCard
           handleClick={turnCard}
           emojiData={emojiData}
           selectedCards={selectedCards}
-          matchedCards={matchedCards} 
+          matchedCards={matchedCards}
         />}
+      {isError && <ErrorCard handleClick={resetError} />}
       {areAllCardsMatched && <Confetti />}
     </main>
   )

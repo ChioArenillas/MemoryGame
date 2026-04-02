@@ -1,13 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import RegularButton from "./RegularButton"
+import Select from './Select'
 
-export default function Form({ handleSubmit }) {
-  return (
-    <form className='wrapper'>
-        <RegularButton handleClick={handleSubmit}>
-            Start Game
-        </RegularButton>
-      
-    </form>
-  )
+export default function Form({ handleSubmit, handleChange, firstRender }) {
+
+    const divRef = useRef(null)
+    useEffect(() => {
+        !firstRender && divRef.current.focus
+    }, [])
+    return (
+        <div className='form-container' ref={divRef} tabIndex={-1}>
+            <p className='p--regular'>
+                Customize the game by selecting an emoji category and a number of memory cards.
+            </p>
+            <form className='wrapper'>
+                <Select handleChange={handleChange} />
+
+                <RegularButton handleClick={handleSubmit}>
+                    Start Game
+                </RegularButton>
+            </form>
+        </div>
+    )
 }
