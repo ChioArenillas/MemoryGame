@@ -2,10 +2,10 @@
     margin: 0;
 }
 :root {
-    --dark-primary: #de9f41;
-    --light-primary: #F0F9FF;
+    --dark-primary: #dea044;
+    --light-primary: #ffffff;
     --light-secondary: #e1cfb4;
-    --accent: #646464;
+    --accent: #565656;
     --btn-disabled: #A8A29E;
 }
 
