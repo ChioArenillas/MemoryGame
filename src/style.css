@@ -47,18 +47,18 @@ main {
 
 h1 {
     color: var(--accent);
-    font-size: 2.25rem;
+    font-size: 2.5rem;
     letter-spacing: 2px;
     text-transform: uppercase;
     margin: 0;
 }
 
 .p--large {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
 }
 
 .p--regular {
-    font-size: 1.125em;    
+    font-size: 1.6em;    
 }
 
 /* BUTTONS */
@@ -74,7 +74,7 @@ h1 {
 .btn--text {
     background-color: var(--dark-primary);
     color: var(--light-primary);
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     width: max-content;
     margin: 0 auto;
     padding: .25em .75em;
@@ -105,7 +105,7 @@ h1 {
 
 form {
     gap: 2em;
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     padding: 1em;
     border-radius: .5em;
 }
